@@ -22,7 +22,6 @@ app.get("/", (req, res) => {
 // INDEX ROUTE -- SHOW ALL CAMPGROUNDS
 
 app.get("/campgrounds", async (req, res) => {
-
 	const campgrounds = await Campground.find({});
 	res.render("campgrounds", {campgrounds : campgrounds});
 })
@@ -41,30 +40,24 @@ app.post("/campgrounds", async (req, res) => {
 	const name = req.body.name;
 	const image = req.body.image;
 	const description = req.body.description;
-	
 	await Campground.create(
-	{
-		name : name,
-		image : image,
-		description : description
+		{
+			name : name,
+			image : image,
+			description : description
+		})
+		console.log("Campground added");	
+		res.redirect("/campgrounds");
+	});
+	
+	// SHOW ROUTE -- show info about a campground
+	app.get("/campgrounds/:id", async (req, res) => {
+		const id = req.params.id;
+		const campground = await Campground.findById(id);
+		res.render("show.ejs", {campground : campground});
+	});
+	
+	
+	app.listen(3000, () =>{
+		console.log('Server started');
 	})
-
-	console.log("Campground added");	
-
-	res.redirect("/campgrounds");
-});
-
-
-// SHOW ROUTE -- show info about a campground
-app.get("/campgrounds/:id", async (req, res) => {
-	const id = req.params.id;
-
-	const campground = await Campground.findById(id);
-
-	res.render("show.ejs", {campground : campground});
-});
-
-
-app.listen(3000, () =>{
-	console.log('Server started');
-})
