@@ -1,0 +1,38 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container">
+	<header class="jumbotron">
+		<h1>Welcome to YelpCamp!</h1>
+		<p class="lead">Here you can see all the campgrounds and also you can add a new campground.</p>	
+		<hr c	lass="my-4">	
+
+		<a class="btn btn-primary " href="/campgrounds/new">Add new CampGround</a>	
+	</p>
+</header>
+
+
+
+<div class="row">
+
+	<% campgrounds.forEach((ground) => { %>
+
+	<div class="col-sm-6 col-md-3">
+
+
+		<div class="card" style="width:100%; border: solid 2px black; margin-bottom: 20%;">
+			<img class="card-img-top" src="<%= ground.image %>" alt="Card image" style="height: 150px;">
+			<div class="card-body">
+				<h4 class="card-title"><%= ground.name %></h4>
+				<a href="/campgrounds/<%= ground.id%>" class="btn btn-primary stretched-link">See More Info.</a>
+			</div>
+		</div>
+	</div>
+
+	<% })%>
+</div>
+
+
+</div>
+
+
+
