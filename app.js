@@ -1,18 +1,18 @@
-const app        = require("express")(),
-bodyParser       = require("body-parser"),
+const express    = require("express"),
 mongoose         = require("mongoose"),
 ejsMate          = require("ejs-mate"),
 Campground       = require("./models/campground"),
 methodOverride   = require("method-override");
 
+const app = express();
 
 mongoose.connect("mongodb://localhost/yelp_camp")
 .then(() => {console.log("Mongoose Connection Open")})
 .catch(err => {console.log(err);});
 
 app.engine("ejs", ejsMate);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));	
 app.set("view engine", "ejs");
 
 
@@ -40,15 +40,7 @@ app.get("/campgrounds/new", (req, res) => {
 // CREATE ROUTE -- ADD NEW CAMPGROUND
 
 app.post("/campgrounds", async (req, res) => {
-	const name = req.body.name;
-	const image = req.body.image;
-	const description = req.body.description;
-	await Campground.create(
-		{
-			name : name,
-			image : image,
-			description : description
-		})
+	await Campground.create({...req.body.campground});
 		console.log("Campground added");	
 		res.redirect("/campgrounds");
 	});
@@ -70,7 +62,7 @@ app.post("/campgrounds", async (req, res) => {
 	// Update Route
 	app.put("/campgrounds/:id", async (req, res) =>{
 		const { id } = req.params;
-		await Campground.findByIdAndUpdate(id, {... req.body.ground});
+		await Campground.findByIdAndUpdate(id, {... req.body.campground}, {new: true});
 		res.redirect("/campgrounds/" + id);
 	});
 
