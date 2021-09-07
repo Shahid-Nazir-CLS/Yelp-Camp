@@ -1,0 +1,27 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container" style="border : 5px gray inset; border-radius: 25px;">
+    
+    <form action="/campgrounds/<%= campground.id%>?_method=PUT" method="post" style="font-weight : 800; font-size : 25px"> 
+        <div class="form-group">
+            <br>
+            <label style="font-size : 40px">Edit Campground</label><br>
+            <label for="exampleInputEmail1">Name</label>
+            <input type="Text" class="form-control" name=ground[name] value="<%= campground.name%>">
+            <label for="exampleInputEmail1">Price</label>
+            <input type="Text" class="form-control" name=ground[price] value="<%= campground.price%>">
+            <label for="exampleInputEmail1">Location</label>
+            <input type="Text" class="form-control" name=ground[location] value="<%= campground.location%>">
+            <label for="exampleInputEmail1">Image</label>
+            <input type="Text" class="form-control" name=ground[image] value="<%= campground.image%>">
+        </div>
+        
+        <label for="exampleInputPassword1">Description</label>
+        <textarea id="story" name=ground[description] rows="3" style="width : 100%; font-size: 20px;"><%= campground.description%></textarea>
+        <br><br>
+        <button type="submit" class="btn btn-outline-primary" style="font-size : 25px;">Update Campground</button>
+        <br><br>
+    </form>
+    
+</div>
+

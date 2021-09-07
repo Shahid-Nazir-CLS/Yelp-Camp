@@ -1,8 +1,10 @@
-const app  = require("express")(),
-bodyParser = require("body-parser"),
-mongoose   = require("mongoose"),
-ejsMate    = require("ejs-mate");
-Campground = require("./models/campground")
+const app        = require("express")(),
+bodyParser       = require("body-parser"),
+mongoose         = require("mongoose"),
+ejsMate          = require("ejs-mate"),
+Campground       = require("./models/campground"),
+methodOverride   = require("method-override");
+
 
 mongoose.connect("mongodb://localhost/yelp_camp")
 .then(() => {console.log("Mongoose Connection Open")})
@@ -10,6 +12,7 @@ mongoose.connect("mongodb://localhost/yelp_camp")
 
 app.engine("ejs", ejsMate);
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 
 
@@ -57,6 +60,25 @@ app.post("/campgrounds", async (req, res) => {
 		res.render("show.ejs", {campground : campground});
 	});
 	
+	
+	// Edit Route
+	app.get("/campgrounds/:id/edit", async (req, res) => {
+		const campground = await Campground.findById(req.params.id);
+		res.render("edit", {campground : campground});
+	});
+	
+	// Update Route
+	app.put("/campgrounds/:id", async (req, res) =>{
+		const { id } = req.params;
+		await Campground.findByIdAndUpdate(id, {... req.body.ground});
+		res.redirect("/campgrounds/" + id);
+	});
+
+	// Destroy Route
+	app.delete("/campgrounds/:id", async (req, res) =>{
+		await Campground.findByIdAndRemove(req.params.id);
+		res.redirect("/campgrounds");
+	});
 	
 	app.listen(3000, () =>{
 		console.log('Server started');

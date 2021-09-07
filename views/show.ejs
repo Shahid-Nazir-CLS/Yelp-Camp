@@ -1,17 +1,25 @@
 <% layout("layouts/boilerplate") %>
 
-
 <div class="container">
-
+	
 	<h1><%= campground.name%></h1>
-
+	
 	<img src="<%= campground.image%>">
-
+	
 	<p>
-		Description<br>
-		<%= campground.description%>
+		<h1>Description</h1>
+		
+		<h5> <%= campground.description%> </h5>
+		<br>
+		<h3>Price : $<%= campground.price%> 
+			<br>
+			<%= campground.location%>
+		</h3>
 	</p>
-
-	<a href="/campgrounds" class="btn btn-primary">Go back</a>
-
+	
+	<form action="/campgrounds/<%= campground.id%>?_method=DELETE" method="post">
+		<a href="/campgrounds" class="btn btn-primary">Go back</a>
+		<a href=<%=`/campgrounds/${campground.id}/edit`%> class="btn btn-primary">Edit</a>
+		<button class="btn btn-primary">Delete</button>
+	</form>	
 </div>
