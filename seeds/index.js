@@ -11,6 +11,8 @@ mongoose.connect("mongodb://localhost/yelp_camp")
 const seedDB = async () => {
     await Campground.deleteMany({});
 
+    
+
     for(let i = 0; i < 50; i++){
 
         const rndName = Math.floor(Math.random() * places.length) + 0;
@@ -20,6 +22,7 @@ const seedDB = async () => {
 
         const ground =  new Campground({			// instantiate a new Cat or Document
             name : `${descriptors[rndName]} ${places[rndName]}`,
+            author: '61404834935e1837fdf8f648',
 		    price : rndPrice,
 		    location : `${cities[rndLocation].city}, ${cities[rndLocation].state} `,
 		    // image : `${images[rndImage]}`,
