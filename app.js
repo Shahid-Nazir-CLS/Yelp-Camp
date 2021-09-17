@@ -1,13 +1,19 @@
-const express    	 = require("express"),
-app  				 = express(),
-mongoose         	 = require("mongoose"),
-ejsMate          	 = require("ejs-mate"),
-methodOverride   	 = require("method-override"),
-ExpressError     	 = require("./utils/ExpressError"),
-campgroundRoutes     = require("./routes/campgrounds"),
-reviewRoutes         = require("./routes/reviews"),
-session				 = require("express-session"),
-flash  				 = require("connect-flash");
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
+const methodOverride = require("method-override");
+const ExpressError = require("./utils/ExpressError");
+const campgroundRoutes = require("./routes/campgrounds");
+const userRoutes = require("./routes/users");
+const reviewRoutes = require("./routes/reviews");
+const session = require("express-session");
+const flash = require("connect-flash");
+const path = require('path');
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
+
 
 mongoose.connect("mongodb://localhost/yelp_camp")
 .then(() => {console.log("Mongoose Connection Open")})
@@ -15,10 +21,12 @@ mongoose.connect("mongodb://localhost/yelp_camp")
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));	
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const sessionConfig = {
 	secret: 'mySecretKey',
@@ -34,7 +42,15 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+	res.locals.currentUser = req.user;
 	res.locals.success = req.flash('success');
 	res.locals.error = req.flash('error');
     next();
@@ -42,10 +58,9 @@ app.use((req, res, next) => {
 })
 
 
-
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
-
+app.use("/", userRoutes);
 
 // Home Route
 app.get("/", (req, res) => {

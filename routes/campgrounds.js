@@ -4,6 +4,7 @@ const catchAsync = require("../utils/catchAsync");
 const ExpressError = require("../utils/ExpressError");
 const Campground = require("../models/campground");
 const { campgroundSchema } = require("../joiSchemas");
+const { isLoggedIn } = require("../middleware");
 
 
 const validateCampground = (req, res, next) =>{
@@ -25,13 +26,13 @@ router.get("/", catchAsync(async (req, res) => {
 
 
 // NEW ROUTE -- SHOW FORM TO CREATE NEW CAMPGROUNDS
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {	
 	res.render("campgrounds/new");
 })
 
 
 // CREATE ROUTE -- ADD NEW CAMPGROUND
-router.post("/", validateCampground, catchAsync(async (req, res, next) => {
+router.post("/", isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
 	const campground = await Campground.create({...req.body.campground});
 	req.flash('success', 'Successfully added new campground.')
 	res.redirect(`/campgrounds/${campground._id}`);
@@ -51,7 +52,7 @@ router.get("/:id", catchAsync(async (req, res) => {
 
 
 // Edit Route
-router.get("/:id/edit", catchAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, catchAsync(async (req, res) => {
 	const campground = await Campground.findById(req.params.id);
 	if(!campground){
 		req.flash('error', "Campground not found.");
@@ -62,7 +63,7 @@ router.get("/:id/edit", catchAsync(async (req, res) => {
 
 
 // Update Route
-router.put("/:id", validateCampground, catchAsync(async (req, res) =>{
+router.put("/:id", isLoggedIn, validateCampground, catchAsync(async (req, res) =>{
 	const { id } = req.params;
 	await Campground.findByIdAndUpdate(id, {... req.body.campground}, {new: true});
 	req.flash('success', 'Successfully updated the campground.')
@@ -71,7 +72,7 @@ router.put("/:id", validateCampground, catchAsync(async (req, res) =>{
 
 
 // Destroy Route
-router.delete("/:id", catchAsync(async (req, res) =>{
+router.delete("/:id", isLoggedIn, catchAsync(async (req, res) =>{
 	await Campground.findByIdAndDelete(req.params.id);
 	req.flash('success', 'Successfully deleted the campground.')
 	res.redirect("/campgrounds");
