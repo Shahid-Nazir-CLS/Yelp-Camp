@@ -1,6 +1,7 @@
 <% layout("layouts/boilerplate") %>
 
 <%- include('../partials/flash') %>
+<link rel="stylesheet" href="/stylesheets/rating.css">
 
 <div class="row mt-3 mb-3" style="font-size: 16px; font-weight: 600;">
 	<div class="col-6">
@@ -17,7 +18,7 @@
 				<li class="list-group-item">Submitted by : <%= campground.author.username%></li>
 				<li class="list-group-item">$<%= campground.price%>/night</li>
 			</ul>
-
+			
 			<div class="card-body">
 				<% if(currentUser && campground.author._id.equals(currentUser._id)){ %> 
 					<a href=<%=`/campgrounds/${campground.id}/edit`%> class="btn btn-info">Edit</a>
@@ -25,50 +26,61 @@
 						<button class="btn btn-danger">Delete</button>
 					</form>	
 					<% } %> 
-				<a href="/campgrounds" class="btn btn-primary">Go back</a>
-			</div>
-			 
-		</div>
-	</div>
-
-	<div class="col-6">
-		<% if(currentUser){ %> 
-		<h2>Leave a Review!!!</h2>
-		<form class="needs-validation" action="/campgrounds/<%=campground.id%>/reviews" method="post" novalidate>
-			<div class="mb-3">
-				<label class="form-label" for="rating">Rating</label>
-				<input  class="form-range" type="range" name="review[rating]" id="rating" min="1" max="5">
-			</div>
-			<div class="mb-3">
-				<label class="form-label" for="body">Review</label>
-				<textarea class='form-control' name="review[body]" id="body" cols="30" rows="5" required></textarea>
-				<div class="valid-feedback">Looks Good!</div>
-				<div class="invalid-feedback">Please provide a valid review.</div>
-			</div>
-			<button type="Submit" class="btn btn-success">Submit</button>
-		</form>
-		<% } %> 
-		
-		<br><br>
-		
-		<h2>Reviews</h2>
-		
-		<% for(review of campground.reviews){%>
-			<div class="mt-3 card">
-				<h3  class="card-title">&nbsp;   Rating : <%=review.rating%></h3 >
-				<div class="card-body">
-					<%=review.body%>
+					<a href="/campgrounds" class="btn btn-primary">Go back</a>
 				</div>
-				<form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
-					<p style="margin-left: 2%;">Posted by : <%=review.author.username  %> </p>
-					
-					<% if(currentUser && currentUser._id.equals(review.author._id)){ %> 
-					<button type="Submit" class="btn btn-sm btn-danger mb-2" style="margin-left: 2%;">Delete</button>
-					<% } %> 
-				</form>
+				
 			</div>
-		<%}%>
-	</div>
-</div>
-
-
+		</div>
+		
+		<div class="col-6">
+			<% if(currentUser){ %> 
+				<h2>Leave a Review!!!</h2>
+				<form class="needs-validation" action="/campgrounds/<%=campground.id%>/reviews" method="post" novalidate>
+					<div class="mb-3">
+						<label class="form-label" for="rating" style="font-weight: 600; font-size: 20px;">Rating</label>
+						<fieldset class="starability-basic">
+							<input type="radio" id="first-rate1" name="review[rating]" value="1" checked/>
+							<label for="first-rate1" title="Terrible">1 star</label>
+							<input type="radio" id="first-rate2" name="review[rating]" value="2" />
+							<label for="first-rate2" title="Not good">2 stars</label>
+							<input type="radio" id="first-rate3" name="review[rating]" value="3" />
+							<label for="first-rate3" title="Average">3 stars</label>
+							<input type="radio" id="first-rate4" name="review[rating]" value="4" />
+							<label for="first-rate4" title="Very good">4 stars</label>
+							<input type="radio" id="first-rate5" name="review[rating]" value="5" />
+							<label for="first-rate5" title="Amazing">5 stars</label>
+						</fieldset>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="body">Review</label>
+						<textarea class='form-control' name="review[body]" id="body" cols="30" rows="5" required></textarea>
+						<div class="valid-feedback">Looks Good!</div>
+						<div class="invalid-feedback">Please provide a valid review.</div>
+					</div>
+					<button type="Submit" class="btn btn-success">Submit</button>
+				</form>
+				<% } %> 
+				
+				<br><br>
+				
+				<h2>Reviews</h2>
+				
+				<% for(review of campground.reviews){%>
+					<div class="mt-3 card">
+						<p style="margin-left: 2%;">Posted by : <%=review.author.username  %> </p>
+						<p class="starability-result" data-rating=<%=review.rating%> style="margin-left: 2%;"></p>
+						<div class="card-body">
+							<%=review.body%>
+						</div>
+						<form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
+							<% if(currentUser && currentUser._id.equals(review.author._id)){ %> 
+								<button type="Submit" class="btn btn-sm btn-danger mb-2" style="margin-left: 2%;">Delete</button>
+								<% } %> 
+							</form>
+						</div>
+						<%}%>
+					</div>
+				</div>
+				
+				
+				
