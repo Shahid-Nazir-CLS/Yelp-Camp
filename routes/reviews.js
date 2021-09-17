@@ -1,31 +1,13 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const catchAsync = require("../utils/catchAsync");
-const Campground = require("../models/campground");
-const Review = require("../models/reviews");
 const { isLoggedIn, isReviewAuthor } = require("../middleware")
-
+const reviews = require("../controllers/reviews")
 
 // reviews post
-router.post("/", isLoggedIn, catchAsync(async (req, res) => {
-	const campground = await Campground.findById(req.params.id);
-	const review = new Review(req.body.review);
-	review.author = req.user._id;
-	campground.reviews.push(review);
-	await review.save();
-	await campground.save();
-	req.flash('success', 'Successfully added the review.')
-	res.redirect(`/campgrounds/${campground._id}`);
-}));
+router.post("/", isLoggedIn, catchAsync(reviews.createReview));
 
 // delete review
-router.delete("/:reviewID", isReviewAuthor,  isLoggedIn, catchAsync(async (req, res) =>{
-	const { id, reviewID } = req.params;
-    await Campground.findByIdAndUpdate(id, { $pull: {reviews: reviewID}});
-	await Review.findByIdAndRemove(reviewID);
-	req.flash('success', 'Successfully deleted the review.')
-	res.redirect(`/campgrounds/${id}`);
-}));
-
+router.delete("/:reviewID", isReviewAuthor,  isLoggedIn, catchAsync(reviews.deleteReview));
 
 module.exports = router;
