@@ -1,0 +1,43 @@
+body{
+    background-image: linear-gradient(rgba(9, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),  url("https://images.unsplash.com/photo-1497900304864-273dfb3aae33?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80,");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 100% 100%;
+    font-weight: 600;
+}
+
+h1, #greet, #desc{
+    font-size: 80px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(204, 255, 213);
+}
+
+h1{
+    text-align: center;
+}
+
+#desc{
+    font-size: 22px;
+    text-align: center;
+    font-weight: 400;
+}
+
+#greet{
+    font-size: 30px;
+    text-align: center;
+}
+
+#allCamps{
+   text-align: center;
+}
+
+
+#content{
+    /* text-align: center;
+    vertical-align: middle; */
+    background-color:rgba(0, 0, 0, 0.4);
+    top:50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%, 0);
+    position: absolute;
+}

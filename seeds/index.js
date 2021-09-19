@@ -13,7 +13,7 @@ const seedDB = async () => {
 
     
 
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 300; i++){
 
         const rndName = Math.floor(Math.random() * places.length) + 0;
         const rndPrice = Math.floor(Math.random() * 50) + 10;
@@ -24,9 +24,16 @@ const seedDB = async () => {
             name : `${descriptors[rndName]} ${places[rndName]}`,
             author: '61404834935e1837fdf8f648',
 		    price : rndPrice,
+            geometry : {
+                type: 'Point',
+                coordinates: [
+                    cities[rndLocation].longitude,
+                    cities[rndLocation].latitude
+                ]
+            },
 		    location : `${cities[rndLocation].city}, ${cities[rndLocation].state} `,
 		    // image : `${images[rndImage]}`,
-            image : "https://source.unsplash.com/collection/483251", 
+            images : [{url: "https://source.unsplash.com/collection/483251", filename: "Image"}], 
 		    description : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." 
         });
 

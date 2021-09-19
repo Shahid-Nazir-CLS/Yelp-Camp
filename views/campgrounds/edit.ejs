@@ -3,7 +3,7 @@
 <h1  class="mt-5 mb-5" style="text-align: center; font-weight: bolder;">Edit Campground</h1>
 
 <div class="col-6 offset-3" style="font-weight: bold; font-size: 20px;">
-	<form class="needs-validation" action="/campgrounds/<%= campground.id%>?_method=PUT" method="post" novalidate>		
+	<form class="needs-validation" action="/campgrounds/<%= campground.id%>?_method=PUT" method="post" novalidate enctype="multipart/form-data">		
 		
 		
 		<div class="form-group mb-3">
@@ -11,12 +11,6 @@
 			<input type="text" class="form-control" name="campground[name]" placeholder="Name" value="<%= campground.name%>" required>
 			<div class="valid-feedback">Looks Good!</div>
 			<div class="invalid-feedback">Please provide a valid name.</div>
-		</div>
-		<div class="form-group mb-3">
-			<label>Image URL</label>
-			<input type="text" class="form-control" name="campground[image]" placeholder="Image Url" value="<%= campground.image%>" required>
-			<div class="valid-feedback">Looks Good!</div>
-			<div class="invalid-feedback">Please provide a valid image url.</div>
 		</div>
 		<div class="form-group mb-3">
 			<label>Price</label>
@@ -39,6 +33,19 @@
 			<div class="valid-feedback">Looks Good!</div>
 			<div class="invalid-feedback">Please provide a valid description.</div>
 		</div>
+		<div class=" form-group mb-3 custom-file">
+			<input type="file" class=" form-control custom-file-input" id="customFile" name="image" required multiple>
+			<label class="custom-file-label" for="customFile">Choose Image</label>
+		</div>
+		<% campground.images.forEach((img, i) => {%> 
+			<!-- <div class="mb-3"> -->
+				<img src="<%=img.thumbnail%>" alt="image" class="img-thumbnail mb-3">
+				<div class="form-check-inline">
+					<input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+				</div>
+				<label for="image-<%=i%>">Delete</label>
+			<!-- </div> -->
+		<%})  %> 
 		<div class="mb-3">
 			<button type="submit" class="btn btn-primary btn-block">Update Campground</button>
 		</div>

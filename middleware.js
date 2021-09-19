@@ -37,7 +37,6 @@ module.exports.isAuthor = async (req, res, next) =>{
 
 module.exports.isReviewAuthor = async (req, res, next) =>{
 	const { id, reviewID } = req.params;
-	// const campground = await Campground.findById(id).populate('reviews');
 	const review = await Review.findById(reviewID);
 	
 	if(!review.author.equals(req.user._id)){
